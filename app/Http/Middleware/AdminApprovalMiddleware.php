@@ -15,11 +15,18 @@ class AdminApprovalMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->role === 'admin') {
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $user = auth()->user();
+
+        // Admins bypass approval; others must be approved.
+        if ($user->role === 'admin' || $user->is_approved) {
             return $next($request);
         }
 
-        return response()->json(['message' => 'Unauthorized'], 403);
+        return response()->json(['message' => 'User not approved'], 403);
     }
 
 }
