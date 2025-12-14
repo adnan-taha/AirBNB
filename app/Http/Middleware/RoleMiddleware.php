@@ -9,7 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 class RoleMiddleware
 {
     /**
-     * Ensure the authenticated user has one of the required roles.
+     * Ensure the authenticated user has one of the required roles,
+     * admins can access everything.
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
@@ -17,13 +18,18 @@ class RoleMiddleware
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        $userRole = $request->user()->role ?? null;
+        $user = $request->user();
 
-        if ($userRole && in_array($userRole, $roles, true)) {
+        //ADMIN BYPASS
+        if ($user->role === 'admin') {
+            return $next($request);
+        }
+
+        // Check allowed roles
+        if (in_array($user->role, $roles, true)) {
             return $next($request);
         }
 
         return response()->json(['message' => 'Forbidden'], 403);
     }
 }
-
