@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('password'); // TEXT NOT NULL
 
             $table->enum('role', ['tenant', 'owner', 'admin'])->default('tenant'); // role with check
-            $table->string('photo')->nullable(); // photo TEXT
-            $table->string('id_photo')->nullable(); // id_photo TEXT
+            $table->string('photo'); // photo TEXT NOT NULL
+            $table->string('id_photo_front'); // id_photo_front TEXT NOT NULL
+            $table->string('id_photo_back'); // id_photo_back TEXT NOT NULL
             $table->date('birth_date')->nullable(); // birth_date DATE
             $table->boolean('is_approved')->default(false); // is_approved BOOLEAN DEFAULT 0
 

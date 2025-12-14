@@ -20,7 +20,8 @@ class ApartmentRequest extends FormRequest
             'city' => 'required|string',
             'rooms' => 'required|integer',
             'price_per_day' => 'required|numeric',
-        ];
+            'images' => 'nullable|array',
+            ];
     }
 
 }

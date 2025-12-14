@@ -20,7 +20,8 @@ class User extends Authenticatable
         'password',
         'role',
         'photo',
-        'id_photo',
+        'id_photo_front',
+        'id_photo_back',
         'birth_date',
         'is_approved',
     ];

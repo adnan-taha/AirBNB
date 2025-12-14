@@ -29,6 +29,9 @@ class AuthController extends Controller
      *             @OA\Property(property="password", type="string", example="123456"),
      *             @OA\Property(property="role", type="string", example="tenant", enum={"tenant","owner"}),
      *             @OA\Property(property="birth_date", type="string", format="date", example="2000-05-10"),
+     *             @OA\Property(property="photo", type="string", format="url", example="http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"),
+     *             @OA\Property(property="id_photo_front", type="string", format="url", example="http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"),
+     *             @OA\Property(property="id_photo_back", type="string", format="url", example="http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"),
      *         )
      *     ),
      *
@@ -81,7 +84,7 @@ class AuthController extends Controller
      *         @OA\JsonContent(
      *             required={"phone","password"},
      *             @OA\Property(property="phone", type="string", example="0999999999"),
-     *             @OA\Property(property="password", type="string", example="123456"),
+     *             @OA\Property(property="password", type="string", example="12345"),
      *         )
      *     ),
      *
