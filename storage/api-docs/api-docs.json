@@ -1,10 +1,437 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Apartment Booking API",
-        "version": "1.0.0"
+        "title": "AirBNB API",
+        "version": "1.2.4"
     },
     "paths": {
+        "/api/apartments": {
+            "get": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "List apartments (public)",
+                "operationId": "a8e6ba6dd64e1e9208b735934467a0be",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "province",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "min_price",
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "max_price",
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List returned"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Create new apartment",
+                "description": "Creates a new apartment. The images field should contain URLs returned from the image upload endpoint.",
+                "operationId": "c40dbd16366fb6f100e6bbf98eee2768",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "province": {
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "type": "string"
+                                    },
+                                    "rooms": {
+                                        "type": "integer"
+                                    },
+                                    "price_per_day": {
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "images": {
+                                        "description": "Array of image URLs returned from the image upload endpoint",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Apartment created successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Account not approved"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/apartments/{id}": {
+            "get": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Get apartment details",
+                "operationId": "8731d0bfce1620b0c185afb5bda9c6db",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Apartment data"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Update apartment (owner or admin only)",
+                "description": "Updates an existing apartment. The images field should contain URLs returned from the image upload endpoint.",
+                "operationId": "cee4d359c4f6b1b2e4a3e4d993b19214",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Apartment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "province": {
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "type": "string"
+                                    },
+                                    "rooms": {
+                                        "type": "integer"
+                                    },
+                                    "price_per_day": {
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "images": {
+                                        "description": "Array of image URLs returned from the image upload endpoint",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Apartment updated successfully"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Apartment not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Delete apartment (owner or admin)",
+                "operationId": "1d3397cf004ec4489ac4691d8aa3b72e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/apartments/{id}/approve": {
+            "post": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Approve apartment (admin only)",
+                "operationId": "5656480cc1cfc22c3561050a21d4ae29",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Approved"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/owner/apartments": {
+            "get": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "List owner's apartments",
+                "operationId": "2c0dabe271e59a43c88a15c19328e26f",
+                "responses": {
+                    "200": {
+                        "description": "List returned"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/apartment/unapproved": {
+            "get": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Get all unapproved apartments",
+                "description": "Returns a list of all apartments that are not yet approved. Admin only.",
+                "operationId": "c9f4abc5cf949868a30d66de3d9c637a",
+                "responses": {
+                    "200": {
+                        "description": "List of unapproved apartments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "My Apartment"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Nice place to stay"
+                                            },
+                                            "province": {
+                                                "type": "string",
+                                                "example": "Damascus"
+                                            },
+                                            "city": {
+                                                "type": "string",
+                                                "example": "CityName"
+                                            },
+                                            "rooms": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "price_per_day": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 100
+                                            },
+                                            "owner_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "images": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                },
+                                                "example": [
+                                                    "url1",
+                                                    "url2"
+                                                ]
+                                            },
+                                            "is_approved": {
+                                                "type": "boolean",
+                                                "example": false
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No unapproved apartments found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No unapproved apartments found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Forbidden"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [
@@ -58,6 +485,21 @@
                                         "type": "string",
                                         "format": "date",
                                         "example": "2000-05-10"
+                                    },
+                                    "photo": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"
+                                    },
+                                    "id_photo_front": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"
+                                    },
+                                    "id_photo_back": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"
                                     }
                                 },
                                 "type": "object"
@@ -115,7 +557,7 @@
                                     },
                                     "password": {
                                         "type": "string",
-                                        "example": "123456"
+                                        "example": "12345"
                                     }
                                 },
                                 "type": "object"
@@ -383,6 +825,51 @@
                     }
                 ]
             }
+        },
+        "/api/photos/upload": {
+            "post": {
+                "tags": [
+                    "Photos"
+                ],
+                "summary": "Upload one or more images and get URLs",
+                "operationId": "786c141aa484371429b0bd252615059a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "images": {
+                                        "description": "Select one or more images",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Images uploaded successfully"
+                    },
+                    "400": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -396,8 +883,16 @@
     },
     "tags": [
         {
+            "name": "Apartments",
+            "description": "Apartments"
+        },
+        {
             "name": "Auth",
             "description": "Auth"
+        },
+        {
+            "name": "Photos",
+            "description": "Photos"
         }
     ]
 }
