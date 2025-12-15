@@ -826,6 +826,173 @@
                 ]
             }
         },
+        "/api/apartments/{id}/book": {
+            "post": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Create booking (tenant only)",
+                "operationId": "d5adbb7994cfd3288806da936c684bf9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "start_date",
+                                    "end_date"
+                                ],
+                                "properties": {
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Booking created"
+                    },
+                    "409": {
+                        "description": "Dates already booked"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/bookings/{id}/approve": {
+            "post": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Approve booking (owner only)",
+                "operationId": "bbc5c617ad925cf723ee2d7ec1635b9b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking approved"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Booking not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/bookings/{id}/reject": {
+            "post": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Reject booking (owner only)",
+                "operationId": "c6ba739d8897371a1cceed693ae13113",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking rejected"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Booking not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/bookings": {
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "List tenant bookings",
+                "operationId": "a2d328d7cf47053e194bd54aee979b6a",
+                "responses": {
+                    "200": {
+                        "description": "List returned"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/owner/bookings": {
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "List owner bookings",
+                "operationId": "95d4e3ceb50dbca3c3a530958c6c1d25",
+                "responses": {
+                    "200": {
+                        "description": "List returned"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/photos/upload": {
             "post": {
                 "tags": [
@@ -889,6 +1056,10 @@
         {
             "name": "Auth",
             "description": "Auth"
+        },
+        {
+            "name": "Bookings",
+            "description": "Bookings"
         },
         {
             "name": "Photos",
