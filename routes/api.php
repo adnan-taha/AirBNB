@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ReviewController;
+
 
 //Health endpoint
 Route::get('/health', function () {
@@ -11,6 +13,7 @@ Route::get('/health', function () {
 });
 
 //*******AUTH*******
+Route::middleware(['auth:sanctum', 'role:admin'])->post('/register/admin', [AuthController::class, 'register_admin']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -27,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
 //*******APARTMENTS*******
 Route::get('/apartments', [ApartmentController::class, 'index']);
 Route::get('/apartments/{id}', [ApartmentController::class, 'show']);
-
+Route::get('/apartments/{id}/rating', [ApartmentController::class, 'rating']);
 
 // Owner (must be authenticated, approved and owner role)
 Route::middleware(['auth:sanctum', 'approved', 'role:owner'])->group(function () {
@@ -52,7 +55,7 @@ Route::middleware(['auth:sanctum', 'approved'])->group(function () {
     Route::middleware('role:tenant')->group(function () {
         Route::post('/apartments/{id}/book', [BookingController::class, 'store']);
         Route::get('/bookings', [BookingController::class, 'tenantBookings']);
-        Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
+        Route::put('/bookings/{id}', [BookingController::class, 'update']);
     });
 
     Route::middleware('role:owner')->group(function () {
@@ -61,6 +64,18 @@ Route::middleware(['auth:sanctum', 'approved'])->group(function () {
         Route::get('/owner/bookings', [BookingController::class, 'ownerBookings']);
     });
 
+    // Cancel booking (tenant or owner)
+    Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel']);
+
 });
+
+//*******REVIEW*******
+Route::middleware(['auth:sanctum', 'approved'])->group(function () {
+    Route::post('/reviews', [ReviewController::class, 'store']);
+});
+
+Route::get('/apartments/{id}/reviews', [ReviewController::class, 'apartmentReviews']);
+
+
 
 

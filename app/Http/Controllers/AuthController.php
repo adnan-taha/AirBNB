@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\AdminRegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -67,6 +68,67 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Registered successfully. Wait for admin approval.',
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/register/admin",
+     *     tags={"Auth"},
+     *     summary="Register a new admin",
+     *     description="Creates a new admin account.",
+     *     security={{"sanctum": {}}},
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"first_name","last_name","phone","password"},
+     *
+     *             @OA\Property(property="first_name", type="string", example="Adnan"),
+     *             @OA\Property(property="last_name", type="string", example="Khalil"),
+     *             @OA\Property(property="phone", type="string", example="0999999999"),
+     *             @OA\Property(property="email", type="string", example="adnan@example.com"),
+     *             @OA\Property(property="password", type="string", example="123456"),
+     *             @OA\Property(property="birth_date", type="string", format="date", example="2000-05-10"),
+     *             @OA\Property(property="photo", type="string", format="url", example="http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"),
+     *             @OA\Property(property="id_photo_front", type="string", format="url", example="http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"),
+     *             @OA\Property(property="id_photo_back", type="string", format="url", example="http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"),
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=201,
+     *         description="Admin registered successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Registered successfully."),
+     *             @OA\Property(property="user", type="object")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     )
+     * )
+     */
+    public function register_admin(AdminRegisterRequest $request)
+    {
+        $data = $request->validated();
+
+        $user = User::create([
+            'first_name' => $data['first_name'],
+            'last_name'  => $data['last_name'],
+            'phone'      => $data['phone'],
+            'email'      => $data['email'] ?? null,
+            'password'   => Hash::make($data['password']),
+            'role'       => 'admin',
+            'birth_date' => $data['birth_date'] ?? null,
+            'is_approved'=> true,
+        ]);
+
+        return response()->json([
+            'message' => 'Registered successfully.',
             'user' => $user
         ]);
     }

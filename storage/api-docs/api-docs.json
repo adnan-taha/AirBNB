@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "AirBNB API",
-        "version": "1.2.4"
+        "version": "1.2.8"
     },
     "paths": {
         "/api/apartments": {
@@ -432,6 +432,53 @@
                 ]
             }
         },
+        "/api/apartments/{id}/rating": {
+            "get": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Get average rating of an apartment",
+                "operationId": "eb9af9d9deafda79e5051531784ddcb7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Average rating returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "apartment_id": {
+                                            "type": "integer"
+                                        },
+                                        "average_rating": {
+                                            "type": "number",
+                                            "example": 4.5
+                                        },
+                                        "reviews_count": {
+                                            "type": "integer",
+                                            "example": 10
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Apartment not found"
+                    }
+                }
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [
@@ -531,6 +578,103 @@
                         "description": "Validation error"
                     }
                 }
+            }
+        },
+        "/api/register/admin": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register a new admin",
+                "description": "Creates a new admin account.",
+                "operationId": "61e7dfd0b1ae68e0278b89725c2dcc58",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "phone",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "Adnan"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Khalil"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "0999999999"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "adnan@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2000-05-10"
+                                    },
+                                    "photo": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"
+                                    },
+                                    "id_photo_front": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"
+                                    },
+                                    "id_photo_back": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "http://localhost:8000/storage/uploads/gqeLHBemszfLGTBJjJDIkPsarbPs125oqAU6OcnA.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Admin registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Registered successfully."
+                                        },
+                                        "user": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/api/login": {
@@ -993,6 +1137,102 @@
                 ]
             }
         },
+        "/api/bookings/{id}": {
+            "put": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Update booking (tenant only)",
+                "operationId": "fb300db4391c22f2232e2814d49641c7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Booking updated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Booking not found"
+                    },
+                    "409": {
+                        "description": "Dates already booked"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/bookings/{id}/cancel": {
+            "post": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Cancel booking (tenant or owner)",
+                "operationId": "728bc370f2a068fc76c90a4cb6a6b9d3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking cancelled"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Booking not found"
+                    },
+                    "400": {
+                        "description": "Booking already cancelled or cannot be cancelled"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/photos/upload": {
             "post": {
                 "tags": [
@@ -1037,6 +1277,81 @@
                     }
                 ]
             }
+        },
+        "/api/reviews": {
+            "post": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Create review (tenant only)",
+                "operationId": "154c71f5f72b459d998f5ea451bd4c96",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "booking_id",
+                                    "rating"
+                                ],
+                                "properties": {
+                                    "booking_id": {
+                                        "type": "integer"
+                                    },
+                                    "rating": {
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "comment": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Review created"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/apartments/{id}/reviews": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get apartment reviews",
+                "operationId": "f8f9ce4603ad1d676b597d290b15451c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reviews list"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1064,6 +1379,10 @@
         {
             "name": "Photos",
             "description": "Photos"
+        },
+        {
+            "name": "Reviews",
+            "description": "Reviews"
         }
     ]
 }

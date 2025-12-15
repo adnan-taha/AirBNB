@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 /**
  * @OA\Info(
  *     title="AirBNB API",
- *     version="1.2.4"
+ *     version="1.2.8"
  * )
  *
  * @OA\SecurityScheme(

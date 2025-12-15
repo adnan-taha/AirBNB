@@ -179,4 +179,131 @@ class BookingController extends Controller
             })->paginate(10)
         );
     }
+
+    /**
+     * @OA\Put(
+     *     path="/api/bookings/{id}",
+     *     tags={"Bookings"},
+     *     summary="Update booking (tenant only)",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="start_date", type="string", format="date"),
+     *             @OA\Property(property="end_date", type="string", format="date")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Booking updated"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Booking not found"),
+     *     @OA\Response(response=409, description="Dates already booked")
+     * )
+     */
+    public function update(BookingRequest $request, $id)
+    {
+        $booking = Booking::with('apartment')->find($id);
+
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        // Only tenant can update their own booking
+        if ($booking->tenant_id !== auth()->id()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        // Only allow updates for pending bookings
+        if ($booking->status !== 'pending') {
+            return response()->json(['message' => 'Can only update pending bookings'], 400);
+        }
+
+        $startDate = $request->start_date ?? $booking->start_date;
+        $endDate = $request->end_date ?? $booking->end_date;
+
+        // Validate that end_date is after start_date
+        if (now()->parse($endDate)->lte(now()->parse($startDate))) {
+            return response()->json(['message' => 'End date must be after start date'], 400);
+        }
+
+        // If dates are being changed, check for overlaps
+        if ($request->has('start_date') || $request->has('end_date')) {
+            $overlap = Booking::where('apartment_id', $booking->apartment_id)
+                ->where('id', '!=', $booking->id)
+                ->where('status', 'approved')
+                ->where(function ($q) use ($startDate, $endDate) {
+                    $q->whereBetween('start_date', [$startDate, $endDate])
+                        ->orWhereBetween('end_date', [$startDate, $endDate])
+                        ->orWhere(function ($q) use ($startDate, $endDate) {
+                            $q->where('start_date', '<=', $startDate)
+                                ->where('end_date', '>=', $endDate);
+                        });
+                })
+                ->exists();
+
+            if ($overlap) {
+                return response()->json(['message' => 'Apartment already booked for these dates'], 409);
+            }
+
+            // Recalculate total price if dates changed
+            $days = now()->parse($startDate)->diffInDays(now()->parse($endDate));
+            $booking->total_price = $days * $booking->apartment->price_per_day;
+        }
+
+        $booking->start_date = $startDate;
+        $booking->end_date = $endDate;
+        $booking->save();
+
+        return response()->json(['message' => 'Booking updated', 'booking' => $booking]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/bookings/{id}/cancel",
+     *     tags={"Bookings"},
+     *     summary="Cancel booking (tenant or owner)",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Booking cancelled"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Booking not found"),
+     *     @OA\Response(response=400, description="Booking already cancelled or cannot be cancelled")
+     * )
+     */
+    public function cancel($id)
+    {
+        $booking = Booking::with('apartment')->find($id);
+
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        // Check if user is tenant or owner
+        $isTenant = $booking->tenant_id === auth()->id();
+        $isOwner = $booking->apartment->owner_id === auth()->id();
+
+        if (!$isTenant && !$isOwner) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        // Don't allow cancelling already cancelled bookings
+        if ($booking->status === 'cancelled') {
+            return response()->json(['message' => 'Booking is already cancelled'], 400);
+        }
+
+        $booking->status = 'cancelled';
+        $booking->save();
+
+        return response()->json(['message' => 'Booking cancelled', 'booking' => $booking]);
+    }
 }
