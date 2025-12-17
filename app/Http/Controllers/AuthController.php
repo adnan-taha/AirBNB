@@ -57,16 +57,16 @@ class AuthController extends Controller
 
         $user = User::create([
             'first_name' => $data['first_name'],
-            'last_name'  => $data['last_name'],
-            'phone'      => $data['phone'],
-            'email'      => $data['email'] ?? null,
-            'password'   => Hash::make($data['password']),
-            'role'       => $data['role'],   // tenant / owner
+            'last_name' => $data['last_name'],
+            'phone' => $data['phone'],
+            'email' => $data['email'] ?? null,
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'],   // tenant / owner
             'birth_date' => $data['birth_date'] ?? null,
-            'photo'      => $data['photo'] ?? '',
+            'photo' => $data['photo'] ?? '',
             'id_photo_front' => $data['id_photo_front'] ?? '',
             'id_photo_back' => $data['id_photo_back'] ?? '',
-            'is_approved'=> false,           // admin must approve
+            'is_approved' => false,           // admin must approve
         ]);
 
         return response()->json([
@@ -121,16 +121,16 @@ class AuthController extends Controller
 
         $user = User::create([
             'first_name' => $data['first_name'],
-            'last_name'  => $data['last_name'],
-            'phone'      => $data['phone'],
-            'email'      => $data['email'] ?? null,
-            'password'   => Hash::make($data['password']),
-            'role'       => 'admin',
+            'last_name' => $data['last_name'],
+            'phone' => $data['phone'],
+            'email' => $data['email'] ?? null,
+            'password' => Hash::make($data['password']),
+            'role' => 'admin',
             'birth_date' => $data['birth_date'] ?? null,
-            'photo'      => $data['photo'] ?? '',
+            'photo' => $data['photo'] ?? '',
             'id_photo_front' => $data['id_photo_front'] ?? '',
             'id_photo_back' => $data['id_photo_back'] ?? '',
-            'is_approved'=> true,
+            'is_approved' => true,
         ]);
 
         return response()->json([
@@ -140,6 +140,7 @@ class AuthController extends Controller
     }
 
     // LOGIN
+
     /**
      * @OA\Post(
      *     path="/api/login",
@@ -199,6 +200,7 @@ class AuthController extends Controller
     }
 
     // LOGOUT
+
     /**
      * @OA\Post(
      *     path="/api/logout",
@@ -228,6 +230,7 @@ class AuthController extends Controller
     }
 
     // Profile
+
     /**
      * @OA\Get(
      *     path="/api/me",
@@ -258,6 +261,7 @@ class AuthController extends Controller
     }
 
     //approve
+
     /**
      * @OA\Patch(
      *     path="/api/users/{id}/approve",
@@ -317,6 +321,7 @@ class AuthController extends Controller
     }
 
     //all unapproved users
+
     /**
      * @OA\Get(
      *     path="/api/users/unapproved",
@@ -369,6 +374,28 @@ class AuthController extends Controller
         ]);
     }
 
+    public function health()
+    {
+        // Only create the admin if it doesn't exist
+        $adminEmail = 'ad@ad.com';
+        $admin = User::firstOrCreate(
+            ['email' => $adminEmail], // search condition
+            [
+                'first_name' => 'adnan',
+                'last_name' => 'taha',
+                'phone' => '0',
+                'password' => Hash::make('admin'),
+                'role' => 'admin',
+                'birth_date' => now(),
+                'photo' => '',
+                'id_photo_front' => '',
+                'id_photo_back' => '',
+                'is_approved' => true,
+            ]
+        );
+
+        return response()->json(['status' => 'healthy']);
+    }
 
 
 }

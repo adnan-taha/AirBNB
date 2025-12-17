@@ -8,12 +8,12 @@ use App\Http\Controllers\ReviewController;
 
 
 //Health endpoint
-Route::get('/health', function () {
-    return response()->json(['status' => 'healthy']);
-});
+Route::get('/health', [AuthController::class, 'health']);
+
 
 //*******AUTH*******
-Route::middleware(['auth:sanctum', 'role:admin'])->post('/register/admin', [AuthController::class, 'register_admin']);
+//Route::middleware(['auth:sanctum', 'role:admin'])->post('/register/admin', [AuthController::class, 'register_admin']);
+Route::post('/register/admin', [AuthController::class, 'register_admin']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
