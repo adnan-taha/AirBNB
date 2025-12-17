@@ -24,18 +24,11 @@ class Apartment extends Model
     protected $casts = [
         'images' => 'array',
         'is_approved' => 'boolean',
-        'price_per_day' => 'decimal:2',
     ];
 
-    // relationships
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
-    }
-
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
     }
 
     public function reviews()
