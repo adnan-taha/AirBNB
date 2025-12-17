@@ -124,6 +124,9 @@ class AuthController extends Controller
             'password'   => Hash::make($data['password']),
             'role'       => 'admin',
             'birth_date' => $data['birth_date'] ?? null,
+            'photo'      => $data['photo'] ?? '',
+            'id_photo_front' => $data['id_photo_front'] ?? '',
+            'id_photo_back' => $data['id_photo_back'] ?? '',
             'is_approved'=> true,
         ]);
 
