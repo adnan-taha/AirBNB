@@ -47,6 +47,13 @@ return [
                     base_path('app'),
                 ],
             ],
+            'ui' => [
+                'display' => [
+                    'doc_expansion' => 'none',
+                ],
+                // Add this:
+                'url' => '/docs',  // ← tell Swagger UI where the JSON is
+            ],
         ],
     ],
     'defaults' => [
