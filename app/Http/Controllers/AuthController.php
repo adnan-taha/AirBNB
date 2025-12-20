@@ -303,13 +303,6 @@ class AuthController extends Controller
             ], 404);
         }
 
-        // Optional: Prevent admin from approving themselves
-        if ($user->role === 'admin') {
-            return response()->json([
-                'message' => 'Cannot approve an admin.'
-            ], 400);
-        }
-
         // Set is_approved to true
         $user->is_approved = true;
         $user->save();
