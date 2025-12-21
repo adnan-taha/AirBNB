@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BookingRequest;
 use App\Models\Apartment;
 use App\Models\Booking;
+use App\Services\FirebaseNotificationService;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -108,6 +109,13 @@ class BookingController extends Controller
         $booking->status = 'approved';
         $booking->save();
 
+        app(FirebaseNotificationService::class)->send(
+            $booking->tenant->fcm_token,
+            'Booking Approved',
+            'Your booking has been approved',
+            ['booking_id' => $booking->id]
+        );
+
         return response()->json(['message' => 'Booking approved', 'booking' => $booking]);
     }
 
@@ -142,6 +150,12 @@ class BookingController extends Controller
 
         $booking->status = 'rejected';
         $booking->save();
+
+        app(FirebaseNotificationService::class)->send(
+            $booking->tenant->fcm_token,
+            'Booking Rejected',
+            'Unfortunately, your booking was rejected'
+        );
 
         return response()->json(['message' => 'Booking rejected']);
     }

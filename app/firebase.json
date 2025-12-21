@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "airbnb-notification-15606",
+  "private_key_id": "cedbc0201d5a31504f6ed5f0fc75df1e3eade33f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCqw9qN++JlBKPh\nTK7Xqvo+exp/Fp+ZPLW16bzH2vzUg7KJLempQdniaq4NAvIjFTVVGmmQLgUTdgBi\nuVfG24TPy/i/U7WslOmZiBR1xIHI7HS3dfkuCfTZx6prgJuUZaa7q7Jk7xSRlDrF\nAcnts4P0XaH0aPnajKSA9eOaO0ZAscEZvWRDue1cYUiPEW1i68A3Tyq/LW+KOO0Z\ngvRMfC4CPxObSt825tOjCHF8AeCeS696RRrySs8WC7JxWbJ2G5S9ePxseiXRvTeb\nVFjt3HRnvmtqpT7KU3gGsqhZBDrXhJvSrHXJDrmVwEkx3XvJ4h3DkjG8NmALHSmo\nMZw07Kl/AgMBAAECggEAL5YqlnyF5262mHc9Ff6gg77ccGQGj7ZaUNpU8EC3SiV1\nIEM6JR+jrzPZUujqPxqO5StaFYKtiXHNw7Uwn8rWpO2LYQ3bx78rpcxFH1hmbm5u\nTB3FFa5SnEnG1PRe5qi5IP1E1lnFmpf7FKFd+y6WbAeXtTt3vQ6KXSGojndMKYSp\n8VG4//+mwDOOxlfli24TMl3ztqNPkbFylu/H1NBlA4llyDVRj5EXFL0qwydDolkS\n8CmGFq3H0YtCcRtCkBWNeGiOpvLywcqEg/FSw+mfTQ1wqk5aMBAiVZNVSRyYXLfl\nXsfTcvb4TvDDhBRU6jHFTFeSXZcLLox/Cw0g7YtHUQKBgQDt44BlpQrZNhd8yt4B\nVHq7KoRMTCj7a2xLUIBhYn1hdK0sTtDdPZg18m5TnOSC7OERr23AmDXmnZ6ZZ0Kc\nqrRIW3+Pkn2lnjv7wH25SKakbiUdHufWHXp34kxrTR3ygOMUOg5k0Fkn+RyJS1y9\ngQc4GkQfF8y0NSSbi8ACfy5YiQKBgQC3xBliys00pNx14hOaqOQCgbISLeWutomf\n8YsQjst70+O3+0Ifn05h8zWTp8YKXW2gSL04kSwEDViXLU5cRO7PmapEnUvp3jup\nPYJa4vrBCXhebvcjwoADMCL4iYLg4rB4kvOgF5ydLXBB26fS7MPcDs6Pfjk+iKQw\npjuFg/NfxwKBgQCdWKEQmj22tkSK0lRNZOdY7SJcpPNmeQNEPZbs0wxDbb0tVWRp\nMdh/tj6rJ1cuEig8XmClxwe/5fmFVfuFTJO6WGrjN+3LogHi3stJxngSwpfhzxNh\nWFYs/Y22W2e3gvCv7Eag//44pljtpt9MqQ9xWE4+kqtfdtcj2yfBfwXUoQKBgF8+\nXOXuNIM3eygB/6UmKd7+t3tinGt8IkJqn2f6io5oWNsvd6sKF0b/FeKsjyEqITp0\n2NWrsEN9Y1AfZEDAXYHto+kiGYlh7EwgHCLdB5frP566Jo87LLv6Q/XK17GU7F/h\n0jFEa6CvP0JzBT12B2FTr02B30uA6JBqZ+kgZZBbAoGBAKKDTIMvoJ9XAjjKKve/\nZaSD9Hyai2LMwnUn2xsi+fXttDnEmhywtMqbv7TqK2O0XyyV7UfVHR0AHy1dYHoI\nlMmqCGYhItaaVkZ1EpHjimGVfa4GFGzNKuHzT1qWaBaCh9TmYkq5P3l3f79gfQzI\nDTDeMZRmRHiinMSg9cy13hkU\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@airbnb-notification-15606.iam.gserviceaccount.com",
+  "client_id": "108731847163027821248",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40airbnb-notification-15606.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

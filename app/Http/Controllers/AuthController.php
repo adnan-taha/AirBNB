@@ -6,6 +6,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\AdminRegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
+use App\Services\FirebaseNotificationService;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -307,6 +308,12 @@ class AuthController extends Controller
         $user->is_approved = true;
         $user->save();
 
+        app(FirebaseNotificationService::class)->send(
+            $user->fcm_token,
+            'Account Approved',
+            'Your account is now active'
+        );
+
         return response()->json([
             'message' => 'User approved successfully.',
             'user' => $user
@@ -367,28 +374,72 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/health",
+     *     summary="Check API health",
+     *     tags={"Health"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="API is healthy",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="healthy")
+     *         )
+     *     )
+     * )
+     */
     public function health()
     {
-        // Only create the admin if it doesn't exist
-        $adminEmail = 'ad@ad.com';
-        $admin = User::firstOrCreate(
-            ['email' => $adminEmail], // search condition
-            [
-                'first_name' => 'adnan',
-                'last_name' => 'taha',
-                'phone' => '0',
-                'password' => Hash::make('admin'),
-                'role' => 'admin',
-                'birth_date' => now(),
-                'photo' => '',
-                'id_photo_front' => '',
-                'id_photo_back' => '',
-                'is_approved' => true,
-            ]
-        );
-
         return response()->json(['status' => 'healthy']);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/store-token",
+     *     summary="Store FCM token for authenticated user",
+     *     tags={"FCM"},
+     *     security={{"sanctum": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"token"},
+     *             @OA\Property(property="token", type="string", example="fcm_device_token_here")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Token saved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Token saved")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="array", @OA\Items(type="string"))
+     *         )
+     *     )
+     * )
+     */
+    public function storeToken(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string'
+        ]);
+
+        $user = auth()->user();
+        $user->fcm_token = $request->token;
+        $user->save();
+
+        return response()->json(['message' => 'Token saved']);
+    }
+
+
 
 
 }
