@@ -308,11 +308,11 @@ class AuthController extends Controller
         $user->is_approved = true;
         $user->save();
 
-        app(FirebaseNotificationService::class)->send(
-            $user->fcm_token,
-            'Account Approved',
-            'Your account is now active'
-        );
+//        app(FirebaseNotificationService::class)->send(
+//            $user->fcm_token,
+//            'Account Approved',
+//            'Your account is now active'
+//        );
 
         return response()->json([
             'message' => 'User approved successfully.',
