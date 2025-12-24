@@ -4,6 +4,11 @@
         "title": "AirBNB API",
         "version": "1.2.8"
     },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
     "paths": {
         "/api/apartments": {
             "get": {

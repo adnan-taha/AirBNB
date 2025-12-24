@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'approved' => \App\Http\Middleware\ApprovedMiddleware::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'admin' => \App\Http\Middleware\AdminApprovalMiddleware::class,
+            'trust' => \App\Http\Middleware\TrustProxies::class,
+
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

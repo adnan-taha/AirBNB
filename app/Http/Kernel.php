@@ -33,6 +33,7 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AdminApprovalMiddleware::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'approved' => \App\Http\Middleware\ApprovedMiddleware::class,
+        'trust' => \App\Http\Middleware\TrustProxies::class,
     ];
 
 }
