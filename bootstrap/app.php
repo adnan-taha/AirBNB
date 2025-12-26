@@ -17,7 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'admin' => \App\Http\Middleware\AdminApprovalMiddleware::class,
             'trust' => \App\Http\Middleware\TrustProxies::class,
+            'auth' => \App\Http\Middleware\Authenticate::class,
 
+        ]);
+        $middleware->use([
+            \App\Http\Middleware\ForceJson::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

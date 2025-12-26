@@ -5,6 +5,8 @@ use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\FavoriteController;
+
 
 
 //Health endpoint
@@ -12,8 +14,7 @@ Route::get('/health', [AuthController::class, 'health']);
 
 
 //*******AUTH*******
-//Route::middleware(['auth:sanctum', 'role:admin'])->post('/register/admin', [AuthController::class, 'register_admin']);
-Route::post('/register/admin', [AuthController::class, 'register_admin']);
+Route::middleware(['auth:sanctum', 'role:admin'])->post('/register/admin', [AuthController::class, 'register_admin']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -75,6 +76,16 @@ Route::middleware(['auth:sanctum', 'approved'])->group(function () {
 });
 
 Route::get('/apartments/{id}/reviews', [ReviewController::class, 'apartmentReviews']);
+
+//*******FAVORITE*******
+Route::middleware(['auth:sanctum', 'approved'])->group(function () {
+    Route::post('/apartments/{id}/favorite', [FavoriteController::class, 'store']);
+    Route::delete('/apartments/{id}/favorite', [FavoriteController::class, 'destroy']);
+    Route::get('/favorites', [FavoriteController::class, 'index']);
+
+});
+
+
 
 
 
