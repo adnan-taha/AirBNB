@@ -4,11 +4,6 @@
         "title": "AirBNB API",
         "version": "1.2.8"
     },
-    "servers": [
-        {
-            "url": "/api"
-        }
-    ],
     "paths": {
         "/api/apartments": {
             "get": {
@@ -1337,6 +1332,84 @@
                 ]
             }
         },
+        "/api/apartments/{id}/favorite": {
+            "post": {
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Add apartment to favorites",
+                "operationId": "2729404290b38d34d84a3e3c78894306",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Added to favorites"
+                    },
+                    "404": {
+                        "description": "Apartment not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Remove apartment from favorites",
+                "operationId": "4f9fb80fcb717fbba08108b88c760aa8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Removed from favorites"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/favorites": {
+            "get": {
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "List user's favorite apartments",
+                "operationId": "81123175f76259d611e2c337477dfa5f",
+                "responses": {
+                    "200": {
+                        "description": "Favorites list"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/photos/upload": {
             "post": {
                 "tags": [
@@ -1487,6 +1560,10 @@
         {
             "name": "Bookings",
             "description": "Bookings"
+        },
+        {
+            "name": "Favorites",
+            "description": "Favorites"
         },
         {
             "name": "Photos",
