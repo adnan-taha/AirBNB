@@ -10,16 +10,21 @@ class Apartment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'owner_id',
         'title',
         'description',
         'province',
         'city',
         'rooms',
+        'bathrooms',
+        'parking',
+        'area',
+        'build_year',
         'price_per_day',
         'images',
+        'owner_id',
         'is_approved',
     ];
+
 
     protected $casts = [
         'images' => 'array',
@@ -41,5 +46,9 @@ class Apartment extends Model
         return $this->hasMany(Favorite::class);
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(\App\Models\Booking::class);
+    }
 
 }

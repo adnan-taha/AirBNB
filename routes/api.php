@@ -8,7 +8,6 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\FavoriteController;
 
 
-
 //Health endpoint
 Route::get('/health', [AuthController::class, 'health']);
 
@@ -64,6 +63,8 @@ Route::middleware(['auth:sanctum', 'approved'])->group(function () {
         Route::post('/bookings/{id}/reject', [BookingController::class, 'reject']);
         Route::get('/owner/bookings', [BookingController::class, 'ownerBookings']);
     });
+
+    Route::get('/apartments/{id}/bookings', [BookingController::class, 'apartmentBookings']);
 
     // Cancel booking (tenant or owner)
     Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel']);

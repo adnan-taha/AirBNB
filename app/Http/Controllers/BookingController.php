@@ -320,4 +320,41 @@ class BookingController extends Controller
 
         return response()->json(['message' => 'Booking cancelled', 'booking' => $booking]);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/apartments/{id}/bookings",
+     *     tags={"Bookings"},
+     *     summary="List bookings for one apartment",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="apartment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Bookings list"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Apartment not found")
+     * )
+     */
+    public function apartmentBookings($apartmentId)
+    {
+        $apartment = \App\Models\Apartment::find($apartmentId);
+
+        if (!$apartment) {
+            return response()->json(['message' => 'Apartment not found'], 404);
+        }
+
+        $user = auth()->user();
+
+
+        $bookings = \App\Models\Booking::where('apartment_id', $apartmentId)
+            ->with('tenant:id,name,email')
+            ->orderBy('start_date')
+            ->get();
+
+        return response()->json($bookings);
+    }
+
 }

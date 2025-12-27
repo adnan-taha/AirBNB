@@ -82,6 +82,10 @@ class ApartmentController extends Controller
      *             @OA\Property(property="city", type="string"),
      *             @OA\Property(property="rooms", type="integer"),
      *             @OA\Property(property="price_per_day", type="number", format="float"),
+     *             @OA\Property(property="build-year", type="number", format="integer"),
+     *             @OA\Property(property="area", type="number", format="integer"),
+     *             @OA\Property(property="parking", type="number", format="boolean"),
+     *             @OA\Property(property="bathrooms", type="number", format="integer"),
      *             @OA\Property(
      *                 property="images",
      *                 type="array",
@@ -112,6 +116,10 @@ class ApartmentController extends Controller
             'price_per_day' => $data['price_per_day'],
             'owner_id' => $data['owner_id'],
             'is_approved' => $data['is_approved'],
+            'bathrooms' => $data['bathrooms'],
+            'barking' => $data['barking'],
+            'area' => $data['area'],
+            'build-year' => $data['build-year'],
             'images' => $data['images'],
         ]);
 
