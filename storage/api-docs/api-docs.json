@@ -80,6 +80,22 @@
                                         "type": "number",
                                         "format": "float"
                                     },
+                                    "build-year": {
+                                        "type": "number",
+                                        "format": "integer"
+                                    },
+                                    "area": {
+                                        "type": "number",
+                                        "format": "integer"
+                                    },
+                                    "parking": {
+                                        "type": "number",
+                                        "format": "boolean"
+                                    },
+                                    "bathrooms": {
+                                        "type": "number",
+                                        "format": "integer"
+                                    },
                                     "images": {
                                         "description": "Array of image URLs returned from the image upload endpoint",
                                         "type": "array",
@@ -1323,6 +1339,41 @@
                     },
                     "400": {
                         "description": "Booking already cancelled or cannot be cancelled"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/apartments/{id}/bookings": {
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "List bookings for one apartment (owner or admin)",
+                "operationId": "adf5207b2457478ab451b051889a055d",
+                "parameters": [
+                    {
+                        "name": "apartment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Bookings list"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Apartment not found"
                     }
                 },
                 "security": [
