@@ -40,6 +40,13 @@
                         "schema": {
                             "type": "number"
                         }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -53,7 +60,6 @@
                     "Apartments"
                 ],
                 "summary": "Create new apartment",
-                "description": "Creates a new apartment. The images field should contain URLs returned from the image upload endpoint.",
                 "operationId": "c40dbd16366fb6f100e6bbf98eee2768",
                 "requestBody": {
                     "required": true,
@@ -67,37 +73,50 @@
                                     "description": {
                                         "type": "string"
                                     },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Apartment",
+                                            "Penthouse",
+                                            "Hotel",
+                                            "Villa"
+                                        ]
+                                    },
                                     "province": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "Damascus",
+                                            "Aleppo",
+                                            "Homs",
+                                            "Rif Dimashq",
+                                            "Tartous",
+                                            "Latakia"
+                                        ]
                                     },
                                     "city": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Mazzeh"
                                     },
                                     "rooms": {
+                                        "type": "integer"
+                                    },
+                                    "bathrooms": {
+                                        "type": "integer"
+                                    },
+                                    "parking": {
+                                        "type": "boolean"
+                                    },
+                                    "area": {
+                                        "type": "integer"
+                                    },
+                                    "build_year": {
                                         "type": "integer"
                                     },
                                     "price_per_day": {
                                         "type": "number",
                                         "format": "float"
                                     },
-                                    "build-year": {
-                                        "type": "number",
-                                        "format": "integer"
-                                    },
-                                    "area": {
-                                        "type": "number",
-                                        "format": "integer"
-                                    },
-                                    "parking": {
-                                        "type": "number",
-                                        "format": "boolean"
-                                    },
-                                    "bathrooms": {
-                                        "type": "number",
-                                        "format": "integer"
-                                    },
                                     "images": {
-                                        "description": "Array of image URLs returned from the image upload endpoint",
                                         "type": "array",
                                         "items": {
                                             "type": "string"
@@ -116,9 +135,6 @@
                     },
                     "401": {
                         "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Account not approved"
                     }
                 },
                 "security": [
@@ -159,13 +175,11 @@
                     "Apartments"
                 ],
                 "summary": "Update apartment (owner or admin only)",
-                "description": "Updates an existing apartment. The images field should contain URLs returned from the image upload endpoint.",
                 "operationId": "cee4d359c4f6b1b2e4a3e4d993b19214",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Apartment ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -184,8 +198,25 @@
                                     "description": {
                                         "type": "string"
                                     },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Apartment",
+                                            "Penthouse",
+                                            "Hotel",
+                                            "Villa"
+                                        ]
+                                    },
                                     "province": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "Damascus",
+                                            "Aleppo",
+                                            "Homs",
+                                            "Rif Dimashq",
+                                            "Tartous",
+                                            "Latakia"
+                                        ]
                                     },
                                     "city": {
                                         "type": "string"
@@ -193,12 +224,23 @@
                                     "rooms": {
                                         "type": "integer"
                                     },
+                                    "bathrooms": {
+                                        "type": "integer"
+                                    },
+                                    "parking": {
+                                        "type": "boolean"
+                                    },
+                                    "area": {
+                                        "type": "integer"
+                                    },
+                                    "build_year": {
+                                        "type": "integer"
+                                    },
                                     "price_per_day": {
                                         "type": "number",
                                         "format": "float"
                                     },
                                     "images": {
-                                        "description": "Array of image URLs returned from the image upload endpoint",
                                         "type": "array",
                                         "items": {
                                             "type": "string"
@@ -235,7 +277,7 @@
                 "tags": [
                     "Apartments"
                 ],
-                "summary": "Delete apartment (owner or admin)",
+                "summary": "Delete apartment (owner or admin only)",
                 "operationId": "1d3397cf004ec4489ac4691d8aa3b72e",
                 "parameters": [
                     {
@@ -253,6 +295,9 @@
                     },
                     "403": {
                         "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not found"
                     }
                 },
                 "security": [
@@ -285,6 +330,9 @@
                     },
                     "403": {
                         "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not found"
                     }
                 },
                 "security": [
@@ -311,188 +359,6 @@
                         "sanctum": []
                     }
                 ]
-            }
-        },
-        "/api/apartment/unapproved": {
-            "get": {
-                "tags": [
-                    "Apartments"
-                ],
-                "summary": "Get all unapproved apartments",
-                "description": "Returns a list of all apartments that are not yet approved. Admin only.",
-                "operationId": "c9f4abc5cf949868a30d66de3d9c637a",
-                "responses": {
-                    "200": {
-                        "description": "List of unapproved apartments",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "title": {
-                                                "type": "string",
-                                                "example": "My Apartment"
-                                            },
-                                            "description": {
-                                                "type": "string",
-                                                "example": "Nice place to stay"
-                                            },
-                                            "province": {
-                                                "type": "string",
-                                                "example": "Damascus"
-                                            },
-                                            "city": {
-                                                "type": "string",
-                                                "example": "CityName"
-                                            },
-                                            "rooms": {
-                                                "type": "integer",
-                                                "example": 2
-                                            },
-                                            "price_per_day": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 100
-                                            },
-                                            "owner_id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "images": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "string"
-                                                },
-                                                "example": [
-                                                    "url1",
-                                                    "url2"
-                                                ]
-                                            },
-                                            "is_approved": {
-                                                "type": "boolean",
-                                                "example": false
-                                            },
-                                            "created_at": {
-                                                "type": "string",
-                                                "format": "date-time"
-                                            },
-                                            "updated_at": {
-                                                "type": "string",
-                                                "format": "date-time"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "No unapproved apartments found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "No unapproved apartments found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Forbidden"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/apartments/{id}/rating": {
-            "get": {
-                "tags": [
-                    "Apartments"
-                ],
-                "summary": "Get average rating of an apartment",
-                "operationId": "eb9af9d9deafda79e5051531784ddcb7",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Average rating returned",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "apartment_id": {
-                                            "type": "integer"
-                                        },
-                                        "average_rating": {
-                                            "type": "number",
-                                            "example": 4.5
-                                        },
-                                        "reviews_count": {
-                                            "type": "integer",
-                                            "example": 10
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Apartment not found"
-                    }
-                }
             }
         },
         "/api/register": {
@@ -1353,7 +1219,7 @@
                 "tags": [
                     "Bookings"
                 ],
-                "summary": "List bookings for one apartment (owner or admin)",
+                "summary": "List bookings for one apartment",
                 "operationId": "adf5207b2457478ab451b051889a055d",
                 "parameters": [
                     {

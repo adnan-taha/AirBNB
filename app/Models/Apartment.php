@@ -12,6 +12,7 @@ class Apartment extends Model
     protected $fillable = [
         'title',
         'description',
+        'type',
         'province',
         'city',
         'rooms',
@@ -24,7 +25,6 @@ class Apartment extends Model
         'owner_id',
         'is_approved',
     ];
-
 
     protected $casts = [
         'images' => 'array',
@@ -48,7 +48,6 @@ class Apartment extends Model
 
     public function bookings()
     {
-        return $this->hasMany(\App\Models\Booking::class);
+        return $this->hasMany(Booking::class);
     }
-
 }
