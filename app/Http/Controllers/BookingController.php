@@ -6,7 +6,10 @@ use App\Http\Requests\BookingRequest;
 use App\Models\Apartment;
 use App\Models\Booking;
 use App\Services\FirebaseNotificationService;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class BookingController extends Controller
 {
@@ -106,9 +109,37 @@ class BookingController extends Controller
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $booking->status = 'approved';
-        $booking->save();
+        if ($booking->status !== 'pending') {
+            return response()->json(['message' => 'Booking already processed'], 409);
+        }
 
+        DB::transaction(function () use ($booking) {
+
+            // Lock tenant wallet
+            $tenant = User::where('id', $booking->tenant_id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            // Lock owner wallet
+            $owner = User::where('id', $booking->apartment->owner_id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($tenant->wallet < $booking->total_price) {
+                throw new HttpException(422, 'Insufficient wallet balance');
+            }
+
+            // Money transfer
+            $tenant->wallet -= $booking->total_price;
+            $owner->wallet += $booking->total_price;
+
+            $tenant->save();
+            $owner->save();
+
+            // Approve booking
+            $booking->status = 'approved';
+            $booking->save();
+        });
 //        app(FirebaseNotificationService::class)->send(
 //            $booking->tenant->fcm_token,
 //            'Booking Approved',
@@ -116,8 +147,11 @@ class BookingController extends Controller
 //            ['booking_id' => $booking->id]
 //        );
 
-        return response()->json(['message' => 'Booking approved', 'booking' => $booking]);
+        return response()->json([
+            'message' => 'Booking approved, payment transferred successfully'
+        ]);
     }
+
 
     /**
      * @OA\Post(

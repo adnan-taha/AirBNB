@@ -6,6 +6,7 @@ use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\WalletController;
 
 
 //Health endpoint
@@ -85,6 +86,13 @@ Route::middleware(['auth:sanctum', 'approved'])->group(function () {
     Route::get('/favorites', [FavoriteController::class, 'index']);
 
 });
+
+//*******MONEY💸💵*******
+Route::middleware(['auth:sanctum', 'approved', 'role:admin'])
+    ->post('/wallet/{id}', [WalletController::class, 'topUp']);
+
+
+
 
 
 
