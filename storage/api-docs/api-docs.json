@@ -1307,7 +1307,7 @@
                 "operationId": "adf5207b2457478ab451b051889a055d",
                 "parameters": [
                     {
-                        "name": "apartment",
+                        "name": "id",
                         "in": "path",
                         "required": true,
                         "schema": {

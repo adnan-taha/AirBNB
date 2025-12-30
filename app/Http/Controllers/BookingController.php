@@ -362,7 +362,7 @@ class BookingController extends Controller
      *     summary="List bookings for one apartment",
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(
-     *         name="apartment",
+     *         name="id",
      *         in="path",
      *         required=true,
      *         @OA\Schema(type="integer")
@@ -372,18 +372,12 @@ class BookingController extends Controller
      *     @OA\Response(response=404, description="Apartment not found")
      * )
      */
-    public function apartmentBookings($apartmentId)
+    public function apartmentBookings($id)
     {
-        $apartment = \App\Models\Apartment::find($apartmentId);
 
-        if (!$apartment) {
-            return response()->json(['message' => 'Apartment not found'], 404);
-        }
+        $apartment = \App\Models\Apartment::findOrFail($id);
 
-        $user = auth()->user();
-
-
-        $bookings = \App\Models\Booking::where('apartment_id', $apartmentId)
+        $bookings = \App\Models\Booking::where('apartment_id', $id)
             ->with('tenant:id,name,email')
             ->orderBy('start_date')
             ->get();
