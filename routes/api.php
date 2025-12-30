@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum', 'approved', 'role:owner'])->group(function ()
 // Admin approve (admin + auth + approved)
 Route::middleware(['auth:sanctum', 'approved', 'role:admin'])->group(function () {
     Route::post('/apartments/{id}/approve', [ApartmentController::class, 'approve']);
-    Route::get('/apartment/unapproved', [ApartmentController::class, 'getUnapproved']);
+    Route::get('/apartment/unapproved', [ApartmentController::class, 'unapprovedApartment']);
 });
 
 //*******PHOTO*******

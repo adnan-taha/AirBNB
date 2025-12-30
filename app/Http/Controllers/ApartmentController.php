@@ -211,4 +211,56 @@ class ApartmentController extends Controller
     {
         return response()->json(Apartment::where('owner_id', auth()->id())->paginate(12));
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/apartment/unapproved",
+     *     summary="Get all unapproved apartment",
+     *     tags={"Apartments"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of unapproved apartment",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unapproved apartment retrieved successfully"),
+     *             @OA\Property(
+     *                 property="apartment",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=2),
+     *                     @OA\Property(property="rooms", type="integer", example="2"),
+     *                     @OA\Property(property="price_per_day", type="integer", example="12"),
+     *                     @OA\Property(property="description", type="string", example="a nice vila"),
+     *                     @OA\Property(property="build_year", type="integer", example="2010"),
+     *                     @OA\Property(property="area", type="integer", example="120"),
+     *                     @OA\Property(property="parking", type="boolean", example=false)
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="No unapproved users found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="No unapproved users found.")
+     *         )
+     *     )
+     * )
+     */
+    public function unapprovedApartment()
+    {
+        $apartment = Apartment::where('is_approved', false)->get();
+
+        if ($apartment->isEmpty()) {
+            return response()->json([
+                'message' => 'No unapproved apartment found.'
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Unapproved apartment retrieved successfully',
+            'users' => $apartment
+        ]);
+    }
 }

@@ -361,6 +361,90 @@
                 ]
             }
         },
+        "/api/apartment/unapproved": {
+            "get": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Get all unapproved apartment",
+                "operationId": "f174fb8c5c2312aa899797c1e1c18649",
+                "responses": {
+                    "200": {
+                        "description": "List of unapproved apartment",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unapproved apartment retrieved successfully"
+                                        },
+                                        "apartment": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "rooms": {
+                                                        "type": "integer",
+                                                        "example": "2"
+                                                    },
+                                                    "price_per_day": {
+                                                        "type": "integer",
+                                                        "example": "12"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "a nice vila"
+                                                    },
+                                                    "build_year": {
+                                                        "type": "integer",
+                                                        "example": "2010"
+                                                    },
+                                                    "area": {
+                                                        "type": "integer",
+                                                        "example": "120"
+                                                    },
+                                                    "parking": {
+                                                        "type": "boolean",
+                                                        "example": false
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No unapproved users found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No unapproved users found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [
