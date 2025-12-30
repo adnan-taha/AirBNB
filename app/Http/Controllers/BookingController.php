@@ -378,7 +378,7 @@ class BookingController extends Controller
         $apartment = \App\Models\Apartment::findOrFail($id);
 
         $bookings = \App\Models\Booking::where('apartment_id', $id)
-            ->with('tenant:id,name,email')
+            ->with('tenant:id,first_name,last_name,email')
             ->orderBy('start_date')
             ->get();
 
