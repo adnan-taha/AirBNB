@@ -23,7 +23,7 @@ class ApartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $q = Apartment::query()->where('is_approved', true);
+        $q = Apartment::query()->where('is_approved', true)->withAvg('reviews', 'rating');
 
         if ($request->filled('city')) $q->where('city', $request->city);
         if ($request->filled('province')) $q->where('province', $request->province);
