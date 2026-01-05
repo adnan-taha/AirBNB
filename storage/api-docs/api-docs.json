@@ -445,6 +445,53 @@
                 ]
             }
         },
+        "/api/apartments/{id}/rating": {
+            "get": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Get average rating of an apartment",
+                "operationId": "eb9af9d9deafda79e5051531784ddcb7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Average rating returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "apartment_id": {
+                                            "type": "integer"
+                                        },
+                                        "average_rating": {
+                                            "type": "number",
+                                            "example": 4.5
+                                        },
+                                        "reviews_count": {
+                                            "type": "integer",
+                                            "example": 10
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Apartment not found"
+                    }
+                }
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [

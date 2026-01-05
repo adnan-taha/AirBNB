@@ -209,7 +209,7 @@ class ApartmentController extends Controller
      */
     public function ownerIndex()
     {
-        return response()->json(Apartment::where('owner_id', auth()->id())->paginate(12));
+        return response()->json(Apartment::where('owner_id', auth()->id()));
     }
 
     /**
@@ -261,6 +261,50 @@ class ApartmentController extends Controller
         return response()->json([
             'message' => 'Unapproved apartment retrieved successfully',
             'users' => $apartment
+        ]);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/apartments/{id}/rating",
+     *     tags={"Apartments"},
+     *     summary="Get average rating of an apartment",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Average rating returned",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="apartment_id", type="integer"),
+     *             @OA\Property(property="average_rating", type="number", example=4.5),
+     *             @OA\Property(property="reviews_count", type="integer", example=10)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Apartment not found"
+     *     )
+     * )
+     */
+    public function rating($id)
+    {
+        $apartment = \App\Models\Apartment::find($id);
+
+        if (!$apartment) {
+            return response()->json(['message' => 'Apartment not found'], 404);
+        }
+
+        $average = $apartment->reviews()->avg('rating');
+        $count = $apartment->reviews()->count();
+
+        return response()->json([
+            'apartment_id' => $apartment->id,
+            'average_rating' => $average ? round($average, 2) : null,
+            'reviews_count' => $count,
         ]);
     }
 }
