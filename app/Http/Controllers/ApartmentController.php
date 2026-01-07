@@ -209,8 +209,11 @@ class ApartmentController extends Controller
      */
     public function ownerIndex()
     {
-        return response()->json(Apartment::where('owner_id', auth()->id()));
+        $apartments = Apartment::where('owner_id', auth()->id())->withAvg('reviews', 'rating')->get();
+
+        return response()->json($apartments);
     }
+
 
     /**
      * @OA\Get(
