@@ -71,6 +71,12 @@ Route::middleware(['auth:sanctum', 'approved'])->group(function () {
         Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel']);
     });
 
+    Route::middleware('auth:sanctum')->get(
+        '/bookings/{id}',
+        [BookingController::class, 'show']
+    );
+
+
 });
 
 //*******REVIEW*******

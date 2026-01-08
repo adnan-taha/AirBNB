@@ -385,4 +385,37 @@ class BookingController extends Controller
         return response()->json($bookings);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/bookings/{id}",
+     *     tags={"Bookings"},
+     *     summary="Get booking details (tenant or owner)",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Booking details returned"),
+     *     @OA\Response(response=403, description="Forbidden"),
+     *     @OA\Response(response=404, description="Booking not found")
+     * )
+     */
+    public function show($id)
+    {
+        $booking = Booking::with([
+            'apartment',
+            'tenant:id,first_name,last_name',
+            'apartment.owner:id,first_name,last_name,email,wallet'
+        ])->find($id);
+
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        return response()->json($booking);
+    }
+
+
 }
