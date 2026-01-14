@@ -17,6 +17,8 @@ Route::get('/health', [AuthController::class, 'health']);
 Route::middleware(['auth:sanctum', 'role:admin'])->post('/register/admin', [AuthController::class, 'register_admin']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/users/all', [AuthController::class, 'getAllUsers']);
+Route::get('/users/{id}', [AuthController::class, 'getUserById']);
 
 Route::middleware(['auth:sanctum', 'role:admin'])->patch('/users/{id}/approve', [AuthController::class, 'approveUser']);
 

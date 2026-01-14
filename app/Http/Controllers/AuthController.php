@@ -7,6 +7,7 @@ use App\Http\Requests\AdminRegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use App\Services\FirebaseNotificationService;
+use http\Env\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -439,7 +440,99 @@ class AuthController extends Controller
         return response()->json(['message' => 'Token saved']);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/users/all",
+     *     tags={"Auth"},
+     *     summary="Get all users with selected fields",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of users",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="users",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="first_name", type="string"),
+     *                     @OA\Property(property="last_name", type="string"),
+     *                     @OA\Property(property="photo", type="string"),
+     *                     @OA\Property(property="is_approved", type="boolean")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated")
+     * )
+     */
+    public function getAllUsers()
+    {
+        // Fetch users with only the specified columns
+        $users = User::select('id', 'first_name', 'last_name', 'photo', 'is_approved')->get();
 
+        return response()->json([
+            'users' => $users,
+        ], 200);
+    }
 
+    /**
+     * @OA\Get(
+     *     path="/api/users/{id}",
+     *     tags={"Auth"},
+     *     summary="Get a single user by ID with selected fields",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="User ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User data",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer"),
+     *             @OA\Property(property="first_name", type="string"),
+     *             @OA\Property(property="last_name", type="string"),
+     *             @OA\Property(property="birth_date", type="string", format="date"),
+     *             @OA\Property(property="phone", type="string"),
+     *             @OA\Property(property="photo", type="string"),
+     *             @OA\Property(property="id_photo_front", type="string"),
+     *             @OA\Property(property="id_photo_back", type="string"),
+     *             @OA\Property(property="wallet", type="number", format="float"),
+     *             @OA\Property(property="created_at", type="string", format="date-time")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="User not found"),
+     *     @OA\Response(response=401, description="Unauthenticated")
+     * )
+     */
+    public function getUserById($id)
+    {
+        $user = User::select(
+            'id',
+            'first_name',
+            'last_name',
+            'birth_date',
+            'phone',
+            'photo',
+            'id_photo_front',
+            'id_photo_back',
+            'wallet',
+            'created_at'
+        )->find($id);
 
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        return response()->json($user, 200);
+    }
 }

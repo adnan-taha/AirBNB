@@ -1082,6 +1082,138 @@
                 ]
             }
         },
+        "/api/users/all": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get all users with selected fields",
+                "operationId": "a42d85617b2288b03663b6eb43cbf1c1",
+                "responses": {
+                    "200": {
+                        "description": "List of users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "users": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "first_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "last_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "photo": {
+                                                        "type": "string"
+                                                    },
+                                                    "is_approved": {
+                                                        "type": "boolean"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get a single user by ID with selected fields",
+                "operationId": "6e390560424e46b9f0549fbc4aa39904",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "first_name": {
+                                            "type": "string"
+                                        },
+                                        "last_name": {
+                                            "type": "string"
+                                        },
+                                        "birth_date": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "phone": {
+                                            "type": "string"
+                                        },
+                                        "photo": {
+                                            "type": "string"
+                                        },
+                                        "id_photo_front": {
+                                            "type": "string"
+                                        },
+                                        "id_photo_back": {
+                                            "type": "string"
+                                        },
+                                        "wallet": {
+                                            "type": "number",
+                                            "format": "float"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/apartments/{id}/book": {
             "post": {
                 "tags": [
