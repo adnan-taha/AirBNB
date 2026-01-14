@@ -1503,8 +1503,11 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
+                                "required": [
+                                    "images[]"
+                                ],
                                 "properties": {
-                                    "images": {
+                                    "images[]": {
                                         "description": "Select one or more images",
                                         "type": "array",
                                         "items": {
@@ -1524,6 +1527,31 @@
                     },
                     "400": {
                         "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "204": {
+                        "description": "Preflight OK"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/photos": {
+            "get": {
+                "tags": [
+                    "Photos"
+                ],
+                "summary": "Get all uploaded images",
+                "operationId": "e150206d1adda8e2633bbe4a935de5a7",
+                "responses": {
+                    "200": {
+                        "description": "List of all images"
                     },
                     "401": {
                         "description": "Unauthenticated"

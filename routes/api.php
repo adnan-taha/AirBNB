@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum', 'approved', 'role:admin'])->group(function ()
 
 //*******PHOTO*******
 Route::middleware('auth:sanctum')->post('/photos/upload', [PhotoController::class, 'uploadImages']);
+Route::get('/photos', [PhotoController::class, 'getAllImages'])->middleware('auth:sanctum');
 
 //*******BOOKINGS*******
 Route::middleware(['auth:sanctum', 'approved'])->group(function () {
