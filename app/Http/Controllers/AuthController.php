@@ -391,6 +391,11 @@ class AuthController extends Controller
      */
     public function health()
     {
+        app(FirebaseNotificationService::class)->send(
+            $user->tenant->fcm_token,
+            'Booking Rejected',
+            'Unfortunately, your booking was rejected'
+        );
         return response()->json(['status' => 'healthy']);
     }
 
