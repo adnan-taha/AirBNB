@@ -11,7 +11,7 @@ use App\Http\Controllers\WalletController;
 
 //Health endpoint
 Route::get('/health', [AuthController::class, 'health']);
-Route::get('/store-token', [AuthController::class, 'storeToken']);
+Route::post('/store-token', [AuthController::class, 'storeToken']);
 
 
 //*******AUTH*******
