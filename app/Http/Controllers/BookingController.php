@@ -205,13 +205,12 @@ class BookingController extends Controller
      */
     public function tenantBookings()
     {
-        $bookings = Booking::withCount('review') // counts how many reviews each booking has
+        $bookings = Booking::withCount('review')
         ->where('tenant_id', auth()->id())
             ->get()
             ->map(function ($booking) {
-                // Add a has_review boolean
                 $booking->has_review = $booking->review_count > 0;
-                unset($booking->review_count); // optional: remove the count field if you just want boolean
+                unset($booking->review_count);
                 return $booking;
             });
 
