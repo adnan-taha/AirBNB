@@ -18,11 +18,14 @@ Route::middleware(['auth:sanctum', 'role:admin'])->post('/register/admin', [Auth
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/users/all', [AuthController::class, 'getAllUsers']);
-Route::get('/users/{id}', [AuthController::class, 'getUserById']);
+
+Route::middleware(['auth:sanctum', 'role:admin'])->get('/users/unapproved', [AuthController::class, 'unapprovedUsers']);
 
 Route::middleware(['auth:sanctum', 'role:admin'])->patch('/users/{id}/approve', [AuthController::class, 'approveUser']);
 
-Route::middleware(['auth:sanctum', 'role:admin'])->get('/users/unapproved', [AuthController::class, 'unapprovedUsers']);
+Route::get('/users/admin/{id}', [AuthController::class, 'getUserByIdUn'])->middleware(['auth:sanctum','role:admin']);
+Route::get('/users/{id}', [AuthController::class, 'getUserById']);
+
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -47,6 +50,7 @@ Route::middleware(['auth:sanctum', 'approved', 'role:owner'])->group(function ()
 Route::middleware(['auth:sanctum', 'approved', 'role:admin'])->group(function () {
     Route::post('/apartments/{id}/approve', [ApartmentController::class, 'approve']);
     Route::get('/apartment/unapproved', [ApartmentController::class, 'unapprovedApartment']);
+    Route::get('/apartments/admin/{id}', [ApartmentController::class, 'showUn']);
 });
 
 //*******PHOTO*******

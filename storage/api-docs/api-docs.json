@@ -307,6 +307,38 @@
                 ]
             }
         },
+        "/api/apartments/admin/{id}": {
+            "get": {
+                "tags": [
+                    "Apartments"
+                ],
+                "summary": "Get apartment details even if not approved",
+                "operationId": "90eaae1b26a615388a758fe09b918735",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Apartment data"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/apartments/{id}/approve": {
             "post": {
                 "tags": [
@@ -1143,6 +1175,84 @@
                 ],
                 "summary": "Get a single user by ID with selected fields",
                 "operationId": "6e390560424e46b9f0549fbc4aa39904",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "first_name": {
+                                            "type": "string"
+                                        },
+                                        "last_name": {
+                                            "type": "string"
+                                        },
+                                        "birth_date": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "phone": {
+                                            "type": "string"
+                                        },
+                                        "photo": {
+                                            "type": "string"
+                                        },
+                                        "id_photo_front": {
+                                            "type": "string"
+                                        },
+                                        "id_photo_back": {
+                                            "type": "string"
+                                        },
+                                        "wallet": {
+                                            "type": "number",
+                                            "format": "float"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/users/admin/{id}": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get a single user by ID with selected fields even if not approved",
+                "operationId": "e764937937be882f0c47d0b554e40498",
                 "parameters": [
                     {
                         "name": "id",

@@ -54,6 +54,26 @@ class ApartmentController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/apartments/admin/{id}",
+     *     tags={"Apartments"},
+     *     summary="Get apartment details even if not approved",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Apartment data"),
+     *     @OA\Response(response=404, description="Not found")
+     * )
+     */
+    public function showUn($id)
+    {
+        $apartment = Apartment::with(['owner'])->find($id);
+        if (!$apartment) {
+            return response()->json(['message' => 'Apartment not found or not approved'], 404);
+        }
+        return response()->json($apartment);
+    }
+
+    /**
      * @OA\Post(
      *     path="/api/apartments",
      *     tags={"Apartments"},
