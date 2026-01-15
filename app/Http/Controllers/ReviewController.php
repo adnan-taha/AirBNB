@@ -38,6 +38,7 @@ class ReviewController extends Controller
             return response()->json(['message' => 'Only tenants can review'], 403);
         }
 
+        // Check booking belongs to tenant and is approved
         $booking = Booking::where('id', $request->booking_id)
             ->where('tenant_id', $user->id)
             ->where('status', 'approved')
@@ -47,10 +48,17 @@ class ReviewController extends Controller
             return response()->json(['message' => 'Invalid booking'], 403);
         }
 
-//        if (Carbon::parse($booking->end_date)->isFuture()) {
-//            return response()->json(['message' => 'Booking not finished yet'], 403);
-//        }
+        // Optional: check if booking has ended
+        // if (Carbon::parse($booking->end_date)->isFuture()) {
+        //     return response()->json(['message' => 'Booking not finished yet'], 403);
+        // }
 
+        $existingReview = Review::where('booking_id', $booking->id)->first();
+        if ($existingReview) {
+            return response()->json(['message' => 'You have already submitted a review for this booking'], 400);
+        }
+
+        // Create the review
         $review = Review::create([
             'apartment_id' => $booking->apartment_id,
             'tenant_id' => $user->id,
@@ -59,8 +67,12 @@ class ReviewController extends Controller
             'comment' => $request->comment,
         ]);
 
-        return response()->json(['message' => 'Review Created', $review], 201);
+        return response()->json([
+            'message' => 'Review created successfully',
+            'review' => $review
+        ], 201);
     }
+
 
 
     /**
