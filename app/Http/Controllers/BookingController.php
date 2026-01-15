@@ -140,12 +140,12 @@ class BookingController extends Controller
             $booking->status = 'approved';
             $booking->save();
         });
-//        app(FirebaseNotificationService::class)->send(
-//            $booking->tenant->fcm_token,
-//            'Booking Approved',
-//            'Your booking has been approved',
-//            ['booking_id' => $booking->id]
-//        );
+        app(FirebaseNotificationService::class)->send(
+            $booking->tenant->fcm_token,
+            'Booking Approved',
+            'Your booking has been approved',
+            ['booking_id' => $booking->id]
+        );
 
         return response()->json([
             'message' => 'Booking approved, payment transferred successfully'
@@ -185,11 +185,11 @@ class BookingController extends Controller
         $booking->status = 'rejected';
         $booking->save();
 
-//        app(FirebaseNotificationService::class)->send(
-//            $booking->tenant->fcm_token,
-//            'Booking Rejected',
-//            'Unfortunately, your booking was rejected'
-//        );
+        app(FirebaseNotificationService::class)->send(
+            $booking->tenant->fcm_token,
+            'Booking Rejected',
+            'Unfortunately, your booking was rejected'
+        );
 
         return response()->json(['message' => 'Booking rejected']);
     }

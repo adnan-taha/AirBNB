@@ -310,11 +310,11 @@ class AuthController extends Controller
         $user->is_approved = true;
         $user->save();
 
-//        app(FirebaseNotificationService::class)->send(
-//            $user->fcm_token,
-//            'Account Approved',
-//            'Your account is now active'
-//        );
+        app(FirebaseNotificationService::class)->send(
+            $user->fcm_token,
+            'Account Approved',
+            'Your account is now active'
+        );
 
         return response()->json([
             'message' => 'User approved successfully.',
@@ -380,6 +380,8 @@ class AuthController extends Controller
      * @OA\Get(
      *     path="/api/health",
      *     summary="Check API health",
+     *     security={{"sanctum": {}}},
+
      *     tags={"Health"},
      *     @OA\Response(
      *         response=200,
@@ -392,12 +394,12 @@ class AuthController extends Controller
      */
     public function health()
     {
-//        $user = auth()->user();
-//        app(FirebaseNotificationService::class)->send(
-//            $user->fcm_token,
-//            'Booking Rejected',
-//            'Unfortunately, your booking was rejected'
-//        );
+        $user = auth()->user();
+        app(FirebaseNotificationService::class)->send(
+            $user->fcm_token,
+            'Booking Rejected',
+            'Unfortunately, your booking was rejected'
+        );
         return response()->json(['status' => 'healthy']);
     }
 
