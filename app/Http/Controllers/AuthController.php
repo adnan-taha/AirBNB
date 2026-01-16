@@ -397,9 +397,9 @@ class AuthController extends Controller
                 'Unfortunately, your booking was rejected'
             );
         } catch (\Throwable $e) {
-            return response()->json(['status' => 'healthy']);
+            return response()->json(['status' => 'healthy', "err" => $e->getMessage(), 'token' => $user->fcm_token]);
         }
-        return response()->json(['status' => 'healthy']);
+        return response()->json(['status' => 'healthy', 'token' => $user->fcm_token]);
     }
 
     /**
