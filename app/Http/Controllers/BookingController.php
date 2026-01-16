@@ -141,18 +141,25 @@ class BookingController extends Controller
             $booking->save();
         });
 
-        if (!$booking->tenant->fcm_token){
+        if (!$booking->tenant->fcm_token) {
             return response()->json([
                 'message' => 'Booking approved, payment transferred successfully but there is no fcm token'
             ]);
         }
+        try {
 
-        app(FirebaseNotificationService::class)->send(
-            $booking->tenant->fcm_token,
-            'Booking Approved',
-            'Your booking has been approved',
-            ['booking_id' => $booking->id]
-        );
+            app(FirebaseNotificationService::class)->send(
+                $booking->tenant->fcm_token,
+                'Booking Approved',
+                'Your booking has been approved',
+                ['booking_id' => $booking->id]
+            );
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Booking approved, payment transferred successfully',
+                'fcm_err' => $e->getMessage()
+            ]);
+        }
 
         return response()->json([
             'message' => 'Booking approved, payment transferred successfully'
@@ -191,12 +198,16 @@ class BookingController extends Controller
 
         $booking->status = 'rejected';
         $booking->save();
+        try {
 
-        app(FirebaseNotificationService::class)->send(
-            $booking->tenant->fcm_token,
-            'Booking Rejected',
-            'Unfortunately, your booking was rejected'
-        );
+            app(FirebaseNotificationService::class)->send(
+                $booking->tenant->fcm_token,
+                'Booking Rejected',
+                'Unfortunately, your booking was rejected'
+            );
+        } catch (\Throwable $e) {
+            return response()->json(['message' => 'Booking rejected', "fcm_err" => $e->getMessage()]);
+        }
 
         return response()->json(['message' => 'Booking rejected']);
     }
@@ -213,7 +224,7 @@ class BookingController extends Controller
     public function tenantBookings()
     {
         $bookings = Booking::withCount('review')
-        ->where('tenant_id', auth()->id())
+            ->where('tenant_id', auth()->id())
             ->get()
             ->map(function ($booking) {
                 $booking->has_review = $booking->review_count > 0;
