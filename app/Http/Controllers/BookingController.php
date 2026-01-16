@@ -140,6 +140,13 @@ class BookingController extends Controller
             $booking->status = 'approved';
             $booking->save();
         });
+
+        if (!$booking->tenant->fcm_token){
+            return response()->json([
+                'message' => 'Booking approved, payment transferred successfully but there is no fcm token'
+            ]);
+        }
+
         app(FirebaseNotificationService::class)->send(
             $booking->tenant->fcm_token,
             'Booking Approved',
@@ -232,7 +239,7 @@ class BookingController extends Controller
         return response()->json(
             Booking::whereHas('apartment', function ($q) {
                 $q->where('owner_id', auth()->id());
-            })->paginate(10)
+            })->get()
         );
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests\RegisterRequest;
@@ -381,7 +382,6 @@ class AuthController extends Controller
      *     path="/api/health",
      *     summary="Check API health",
      *     security={{"sanctum": {}}},
-
      *     tags={"Health"},
      *     @OA\Response(
      *         response=200,
@@ -534,9 +534,12 @@ class AuthController extends Controller
             'id_photo_back',
             'wallet',
             'created_at'
-        )->find($id);
+        )
+            ->where('id', $id)
+            ->where('is_approved', true)
+            ->first();
 
-        if (!$user || !$user->is_approved) {
+        if (!$user) {
             return response()->json([
                 'message' => 'User not found'
             ], 404);
@@ -544,6 +547,7 @@ class AuthController extends Controller
 
         return response()->json($user, 200);
     }
+
 
     /**
      * @OA\Get(
