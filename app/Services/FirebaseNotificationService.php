@@ -9,14 +9,16 @@ class FirebaseNotificationService
 {
     public function __construct(private Messaging $messaging) {}
 
-    public function send($token, $title, $body, array $data = [])
+    public function send(string $token, string $title, string $body, array $data = [])
     {
-        if (!$token) return;
+        if (!$token) {
+            throw new \Exception('FCM token is missing');
+        }
 
         $message = CloudMessage::withTarget('token', $token)
             ->withNotification(Notification::create($title, $body))
             ->withData($data);
 
-        $this->messaging->send($message);
+        return $this->messaging->send($message);
     }
 }

@@ -389,17 +389,25 @@ class AuthController extends Controller
     public function healthNotifi()
     {
         try {
-
             $user = auth()->user();
-            app(FirebaseNotificationService::class)->send(
+
+            $result = app(FirebaseNotificationService::class)->send(
                 $user->fcm_token,
                 'Booking Rejected',
                 'Unfortunately, your booking was rejected'
             );
+
+            return response()->json([
+                'status' => 'sent',
+                'firebase_response' => $result,
+            ]);
         } catch (\Throwable $e) {
-            return response()->json(['status' => 'healthy', "err" => $e->getMessage(), 'token' => $user->fcm_token]);
+            return response()->json([
+                'status' => 'failed',
+                'error' => $e->getMessage(),
+                'token' => $user->fcm_token,
+            ], 500);
         }
-        return response()->json(['status' => 'healthy', 'token' => $user->fcm_token]);
     }
 
     /**
