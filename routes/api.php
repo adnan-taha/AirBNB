@@ -10,7 +10,8 @@ use App\Http\Controllers\WalletController;
 
 
 //Health endpoint
-Route::get('/health', [AuthController::class, 'health'])->middleware(['auth:sanctum']);
+Route::get('/health/no', [AuthController::class, 'health'])->middleware(['auth:sanctum']);
+Route::get('/health', [AuthController::class, 'health']);
 Route::post('/store-token', [AuthController::class, 'storeToken'])->middleware(['auth:sanctum']);
 
 

@@ -379,6 +379,32 @@ class AuthController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/api/health/no",
+     *     summary="Check API health",
+     *     security={{"sanctum": {}}},
+     *     tags={"Health"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="API is healthy",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="healthy")
+     *         )
+     *     )
+     * )
+     */
+    public function healthNotifi()
+    {
+        $user = auth()->user();
+        app(FirebaseNotificationService::class)->send(
+            $user->fcm_token,
+            'Booking Rejected',
+            'Unfortunately, your booking was rejected'
+        );
+        return response()->json(['status' => 'healthy']);
+    }
+
+    /**
+     * @OA\Get(
      *     path="/api/health",
      *     summary="Check API health",
      *     security={{"sanctum": {}}},
@@ -394,12 +420,6 @@ class AuthController extends Controller
      */
     public function health()
     {
-        $user = auth()->user();
-        app(FirebaseNotificationService::class)->send(
-            $user->fcm_token,
-            'Booking Rejected',
-            'Unfortunately, your booking was rejected'
-        );
         return response()->json(['status' => 'healthy']);
     }
 

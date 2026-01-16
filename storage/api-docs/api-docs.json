@@ -1015,6 +1015,38 @@
                 ]
             }
         },
+        "/api/health/no": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Check API health",
+                "operationId": "7b368775f03c7d4ae74c47227f93ecf2",
+                "responses": {
+                    "200": {
+                        "description": "API is healthy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "healthy"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/health": {
             "get": {
                 "tags": [
