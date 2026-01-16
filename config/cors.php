@@ -1,17 +1,19 @@
 <?php
 
 return [
-    'paths' => ['api/*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'], // or specify your Flutter Web domain(s)
+    'allowed_origins' => ['*'], // For Flutter Web, allow all origins in development
+
+    'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+    'exposed_headers' => ['Authorization'],
 
     'max_age' => 0,
 
-    'supports_credentials' => true, // true if you use cookies/Sanctum
+    'supports_credentials' => false, // Set to false when using wildcard origins with bearer tokens
 ];

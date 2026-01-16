@@ -23,13 +23,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth'     => \App\Http\Middleware\Authenticate::class,
         ]);
 
+        // CORS MUST be first to handle OPTIONS preflight requests
+        $middleware->prepend(HandleCors::class);
+
         // Global middleware (order matters)
         $middleware->use([
             \App\Http\Middleware\ForceJson::class,
         ]);
-
-        // CORS MUST be global to handle OPTIONS preflight
-        $middleware->append(HandleCors::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
