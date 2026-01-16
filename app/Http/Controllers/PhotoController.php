@@ -36,21 +36,17 @@ class PhotoController extends Controller
      */
     public function uploadImages(Request $request)
     {
-        // ✅ Allow OPTIONS preflight (CORS)
         if ($request->isMethod('OPTIONS')) {
             return response()->noContent();
         }
 
-        // ✅ Validate
         $request->validate([
             'images' => ['required'],
             'images.*' => ['file', 'mimes:jpg,jpeg,png', 'max:5120'],
         ]);
 
-        // ✅ Get files from both Swagger & real frontend
         $files = $request->file('images') ?? $request->file('images[]');
 
-        // ✅ Normalize to array
         if (!is_array($files)) {
             $files = [$files];
         }
@@ -59,7 +55,7 @@ class PhotoController extends Controller
 
         foreach ($files as $file) {
             $path = $file->store('uploads', 'public');
-            $urls[] = Storage::url($path);
+            $urls[] = asset(Storage::url($path));
         }
 
         return response()->json([
